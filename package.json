@@ -1,0 +1,16 @@
+{
+  "name": "social-network-api",
+  "version": "1.0.0",
+  "description": "A RESTful API for a social network application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "Andria Jean",
+  "license": "CC0-1.0",
+    "dependencies": {
+        "express": "^4.17.1",
+        "mongoose": "^5.5.15"
+    }
+}

@@ -48,6 +48,19 @@ router.put('/users/:id', async (req, res) => {
 });
 
 // DELETE to remove user by its _id
-// BONUS: Remove a user's associated thoughts when deleted
+router.delete('/users/:id', async (req, res) => {
+    try { 
+        const deletedUser = await User.findByIdAndDelete(req.params.id);
+        if (!deletedUser) {
+            return res.status(404).json({error: 'No user found with this id'});
+        }
+        // BONUS: Remove a user's associated thoughts when deleted
+        await Thought.deleteMany({username: deletedUser.username});
+        res.json(deletedUser);
+    } catch (err) {
+        res.status(400).json({error: 'Failed to delete user'});
+    }
+});
+
 
 module.exports = router;

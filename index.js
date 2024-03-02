@@ -1,0 +1,32 @@
+const express = require('express');
+const mongoose = require('mongoose');
+
+const indexRoutes = require('./routes');
+const userRoutes = require('./routes/userRoutes');
+const thoughtRoutes = require('./routes/thoughtRoutes');
+
+const app = express();
+
+
+app.use(express.json());
+
+mongoose.connect('mongodb://localhost/socialNetwork', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true
+    })
+    .then(() => console.log('Connected to the database'))
+    .catch(err => console.error('Database connection error', err));
+    app.use(indexRoutes);
+    app.use(userRoutes);
+    app.use(thoughtRoutes);
+    app.use((err, req, res, next) => {
+        console.error(err.stack);
+        res.status(500).send('Something went wrong!');
+    });
+
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});

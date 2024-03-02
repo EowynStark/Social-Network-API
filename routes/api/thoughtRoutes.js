@@ -88,5 +88,22 @@ router.post('/thoughts/:thoughtId/reactions', async (req, res) => {
 });
 
 // DELETE to pull and remove a reaction by the reaction's reactionId value
+router.delete('/thoughts/:thoughtId/reactions/:reactionId', async (req, res) => {
+    try {
+        const thought = await Thought.findById(req.params.thoughtId);
+        if (!thought) {
+            return res.status(404).json({error: 'No thought found with this id'});
+        }
+        const index = thought.reactions.findIndex(reaction => reaction.reactionId === req.params.reactionId);
+        if (index === -1) {
+            return res.status(404).json({error: 'No reaction found with this id'});
+        }
+        thought.reactions.splice(index, 1);
+        await thought.save();
+        res.json(thought);
+    } catch (err) {
+        res.status(400).json({error: 'Failed to delete reaction'});
+    }
+});
 
 module.exports = router;

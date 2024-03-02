@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 const { User, Thought, Reactions } = require('../models');
+const usersData = require('./usersData');
+const thoughtsData = require('./thoughtsData');
+const reactionsData = require('./reactionsData');
 
 if (mongoose.connection.readyState !== 1) {
     mongoose.connect('mongodb://localhost/socialNetwork', {

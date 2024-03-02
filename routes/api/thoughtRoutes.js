@@ -55,7 +55,22 @@ router.put('/thoughts/:id', async (req, res) => {
 });
 
 // DELETE to remove a thought by its _id
-
+router.delete('/thoughts/:id', async (req, res) => {
+    try {
+        const deletedThought = await Thought.findByIdAndDelete(req.params.id);
+        if (!deletedThought) {
+            return res.status(404).json({error: 'No thought found with this id'});
+        }
+        const user = await User.findById(deletedThought.userId);
+        if (user) {
+            user.thoughts.pull(deletedThought._id);
+            await user.save();
+        }
+        res.json(deletedThought);
+    } catch (err) {
+        res.status(400).json({error: 'Failed to delete thought'});
+    }
+});
 // POST to create a reaction stored in a single thought's reactions array field
 
 // DELETE to pull and remove a reaction by the reaction's reactionId value

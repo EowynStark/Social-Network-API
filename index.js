@@ -18,13 +18,13 @@ mongoose.connect('mongodb://localhost/socialNetwork', {
     .catch(err => console.error('Database connection error', err));
     app.use(indexRoutes);
     app.use('/api/users', userRoutes);
-    app.use('api/thoughts', thoughtRoutes);
+    app.use('/api/thoughts', thoughtRoutes);
     app.use((err, req, res, next) => {
         console.error(err.stack);
         res.status(500).send('Something went wrong!');
     });
 
-const PORT = process.env.PORT || 3001;
+const PORT = 3001;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });

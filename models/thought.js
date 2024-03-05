@@ -35,7 +35,7 @@ const Thought = mongoose.model('Thought', {
             default: Date.now,
             get: timestamp => dateFormat(timestamp)
         }
-}], timestamps: true
+}],
 });
 
 Thought.virtual('reactionCount').get(function() {

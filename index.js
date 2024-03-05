@@ -19,8 +19,8 @@ mongoose.connect('mongodb://localhost/socialNetwork', {
     .then(() => console.log('Connected to the database'))
     .catch(err => console.error('Database connection error', err));
     app.use(indexRoutes);
-    app.use(userRoutes);
-    app.use(thoughtRoutes);
+    app.use('/api/users', userRoutes);
+    app.use('api/thoughts', thoughtRoutes);
     app.use((err, req, res, next) => {
         console.error(err.stack);
         res.status(500).send('Something went wrong!');

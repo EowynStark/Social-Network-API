@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
-const { User, Thought, Reactions } = require('../models');
-const usersData = require('./usersData');
+const User = require('../models/User');
+const Thought = require('../models/Thought');
+const Reaction = require('../models/Reaction');
+const usersData = require('./userData');
 const thoughtsData = require('./thoughtsData');
 const reactionsData = require('./reactionsData');
 
@@ -18,11 +20,11 @@ if (mongoose.connection.readyState !== 1) {
 async function seedData() {
   try {  await User.deleteMany();
     await Thought.deleteMany();
-    await Reactions.deleteMany();
+    await Reaction.deleteMany();
 
     await User.insertMany(usersData);
     await Thought.insertMany(thoughtsData);
-    await Reactions.insertMany(reactionsData);
+    await Reaction.insertMany(reactionsData);
     console.log('Data seeded');
 } catch (err) {
     console.error('Failed to seed database', err);

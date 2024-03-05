@@ -1,10 +1,11 @@
 const router = require('express').Router();
-const {User, Thought, Reaction} = require('./models');
+const {User, Thought, Reaction} = require('../../models');
 
 // GET all users
 router.get('/users', async (req, res) => {
     try {
         const users = await User.find({});
+        console.log(users);
         res.json(users);
     } catch (err) {
         res.status(500).json({error: 'Failed to get users'});

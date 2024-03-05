@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
-const User = require('../models/User');
-const Thought = require('../models/Thought');
-const Reaction = require('../models/Reaction');
+const User = require('../models/user');
+const Thought = require('../models/thought');
+const Reaction = require('../models/reaction');
 const usersData = require('./userData');
-const thoughtsData = require('./thoughtsData');
-const reactionsData = require('./reactionsData');
+const thoughtsData = require('./thoughtData');
+const reactionsData = require('./reactionData');
 
 if (mongoose.connection.readyState !== 1) {
     mongoose.connect('mongodb://localhost/socialNetwork', {

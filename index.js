@@ -13,8 +13,6 @@ app.use(express.json());
 mongoose.connect('mongodb://localhost/socialNetwork', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindAndModify: false,
-    useCreateIndex: true
     })
     .then(() => console.log('Connected to the database'))
     .catch(err => console.error('Database connection error', err));

@@ -2,8 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 const indexRoutes = require('./routes');
-const userRoutes = require('./routes/userRoutes');
-const thoughtRoutes = require('./routes/thoughtRoutes');
+const userRoutes = require('./routes/api/userRoutes');
+const thoughtRoutes = require('./routes/api/thoughtRoutes');
 
 const app = express();
 

@@ -37,6 +37,7 @@ router.post('/thoughts', async (req, res) => {
         await user.save();
         res.status(201).json(thought);
     } catch (err) {
+        console.log(err);
         res.status(400).json({error: 'Failed to create thought'});
     }
 });
@@ -50,6 +51,7 @@ router.put('/thoughts/:id', async (req, res) => {
         }
         res.json(updatedThought);
     } catch (err) {
+        console.log(err);
         res.status(400).json({error: 'Failed to update thought'});
     }
 });
@@ -68,6 +70,7 @@ router.delete('/thoughts/:id', async (req, res) => {
         }
         res.json(deletedThought);
     } catch (err) {
+        console.log(err);
         res.status(400).json({error: 'Failed to delete thought'});
     }
 });
@@ -83,6 +86,7 @@ router.post('/thoughts/:thoughtId/reactions', async (req, res) => {
         await thought.save();
         res.status(201).json(thought);
     } catch (err) {
+        console.log(err);
         res.status(400).json({error: 'Failed to create reaction'});
     }
 });
@@ -90,18 +94,18 @@ router.post('/thoughts/:thoughtId/reactions', async (req, res) => {
 // DELETE to pull and remove a reaction by the reaction's reactionId value
 router.delete('/thoughts/:thoughtId/reactions/:reactionId', async (req, res) => {
     try {
-        const thought = await Thought.findById(req.params.thoughtId);
-        if (!thought) {
+        const {thoughtId, reactionId} = req.params;
+        const updatedThought = await Thought.findByIdAndUpdate(
+            {_id: thoughtId},
+            {$pull: {reactions: {reactionId: reactionId}}},
+            {new: true}
+        );
+        if (!updatedThought) {
             return res.status(404).json({error: 'No thought found with this id'});
         }
-        const index = thought.reactions.findIndex(reaction => reaction.reactionId === req.params.reactionId);
-        if (index === -1) {
-            return res.status(404).json({error: 'No reaction found with this id'});
-        }
-        thought.reactions.splice(index, 1);
-        await thought.save();
-        res.json(thought);
+        res.json(updatedThought);
     } catch (err) {
+        console.log(err);
         res.status(400).json({error: 'Failed to delete reaction'});
     }
 });

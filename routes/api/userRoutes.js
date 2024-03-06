@@ -92,6 +92,7 @@ router.post('/users/:userId/friends/:friendId', async (req, res) => {
 router.delete('/users/:userId/friends/:friendId', async (req, res) => {
     try {
         const {userId, friendId} = req.params;
+        console.log(req.params);
         if (!userId || !friendId) {
             console.error('Invalid user or friend id', error);
             return res.status(400).json({error: 'Invalid user or friend id'});

@@ -14,7 +14,7 @@ router.get('/users', async (req, res) => {
 // GET a single user by its _id and populated thought and friend data
 router.get('/users/:id', async (req, res) => {
     try {
-        const user = await User.findbyId(req.params.id).populate('thoughts').populate('friends');
+        const user = await User.findById(req.params.id).populate('thoughts').populate('friends');
         if (!user) {
             return res.status(404).json({error: 'No user found with this id'});
         }
@@ -30,6 +30,7 @@ router.post('/users', async (req, res) => {
         const newUser = await User.create(req.body);
         res.status(201).json(newUser);
     } catch (err) {
+        console.log(err);
         res.status(400).json({error: 'Failed to create user'});
     }
 });
@@ -43,6 +44,7 @@ router.put('/users/:id', async (req, res) => {
         }
         res.json(updatedUser);
     } catch (err) {
+        console.log(err);
         res.status(400).json({error: 'Failed to update user'});
     }
 });
@@ -58,6 +60,7 @@ router.delete('/users/:id', async (req, res) => {
         await Thought.deleteMany({username: deletedUser.username});
         res.json(deletedUser);
     } catch (err) {
+        console.log(err);
         res.status(400).json({error: 'Failed to delete user'});
     }
 });
@@ -73,17 +76,14 @@ router.post('/users/:userId/friends/:friendId', async (req, res) => {
         if (!user) {
             return res.status(404).json({error: 'No user found with this id'});
         }
-        const friend = await User.findById(friendId);
-        if (!friend) {
-            return res.status(404).json({error: 'No friend found with this id'});
-        }
         if (user.friends.includes(friendId)) {
-            return res.status(400).json({error: 'Friend already added to user friend list'});
+            return res.status(400).json({error: 'User already has this friend in their list'});
         }
         user.friends.push(friendId);
         await user.save();
         res.json(user);
     } catch (err) {
+        console.log(err);
         res.status(400).json({error: 'Failed to add friend'});
     }
 });
@@ -93,23 +93,23 @@ router.delete('/users/:userId/friends/:friendId', async (req, res) => {
     try {
         const {userId, friendId} = req.params;
         if (!userId || !friendId) {
+            console.error('Invalid user or friend id', error);
             return res.status(400).json({error: 'Invalid user or friend id'});
         }
         const user = await User.findById(userId);
         if (!user) {
+            console.error('No user found with this id', error);
             return res.status(404).json({error: 'No user found with this id'});
         }
-        const friend = await User.findById(friendId);
-        if (!friend) {
-            return res.status(404).json({error: 'No friend found with this id'});
-        }
         if (!user.friends.includes(friendId)) {
+            console.error('Friend not found in user friend list', error);
             return res.status(400).json({error: 'Friend not found in user friend list'});
         }
         user.friends.pull(friendId);
         await user.save();
         res.json(user);
     } catch (err) {
+        console.log(err);
         res.status(400).json({error: 'Failed to remove friend'});
     }
 });
